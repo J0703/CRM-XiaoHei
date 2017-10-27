@@ -49,6 +49,10 @@ public class DepartmentServiceImpl extends BaseServiceImpl<Department> implement
     }
 
     public void setDepartmentDao(DepartmentDao departmentDao) {
+
         this.departmentDao = departmentDao;
+
+        super.setBaseDao(departmentDao);
+
     }
 }

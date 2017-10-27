@@ -94,10 +94,10 @@
 
     <!-- Base设置 -->
 
-    <bean id="baseDao" class="com.lanou.dao.impl.BaseDaoImpl">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-    <bean id="baseService" class="com.lanou.service.impl.BaseServiceImpl">
-        <property name="baseDao" ref="baseDao"/>
-    </bean>
+    <!--<bean id="baseDao" class="com.lanou.dao.impl.BaseDaoImpl">-->
+        <!--<property name="sessionFactory" ref="sessionFactory"/>-->
+    <!--</bean>-->
+    <!--<bean id="baseService" class="com.lanou.service.impl.BaseServiceImpl">-->
+        <!--<property name="baseDao" ref="baseDao"/>-->
+    <!--</bean>-->
 </beans>
