@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -82,7 +83,7 @@
     </tr>
 
     <tbody>
-    <c:forEach items="${staffs}" var="staff">
+    <c:forEach items="${pageBean.data}" var="staff">
 
         <tr class="tabtd2">
             <td align="center">${staff.staffName}</td>
@@ -100,22 +101,56 @@
     </tbody>
 </table>
 
+<c:choose>
+    <c:when test="${empty maps}">
+        <table border="0" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+                <td align="right">
+                    <span>第<s:property value="#pageBean.pageNum"/>/<s:property value="#pageBean.totalPage"/>页</span>
+                    <span>
+        	<a href="findAllStaff.action">[首页]</a>&nbsp;&nbsp;
+            <a href="findAllStaff.action?pageNum=${pageBean.pageNum - 1}">[上一页]</a>&nbsp;&nbsp;
+            <a
+                    <c:choose>
 
-<%-- 
-<table border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr>
-    <td align="right">
-    	<span>第1/3页</span>
-        <span>
-        	<a href="#">[首页]</a>&nbsp;&nbsp;
-            <a href="#">[上一页]</a>&nbsp;&nbsp;
-            <a href="#">[下一页]</a>&nbsp;&nbsp;
-            <a href="#">[尾页]</a>
+                        <c:when test="${pageBean.pageNum == pageBean.totalPage}">href="#"</c:when>
+
+                        <c:otherwise>href="findAllStaff.action?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
+
+                    </c:choose>
+            >[下一页]</a>&nbsp;&nbsp;
+            <a href="findAllStaff.action?pageNum=${pageBean.totalPage}">[尾页]</a>
         </span>
-    </td>
-  </tr>
-</table>
---%>
+                </td>
+            </tr>
+        </table>
+    </c:when>
+
+    <c:otherwise>
+        <table border="0" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+                <td align="right">
+                    <span>第<s:property value="#pageBean.pageNum"/>/<s:property value="#pageBean.totalPage"/>页</span>
+                    <span>
+        	<a href="advancedQuery.action?depID=${maps["depID"]}&postId=${maps["postId"]}&staffName=${maps["staffName"]}">[首页]</a>&nbsp;&nbsp;
+            <a href="advancedQuery.action?pageNum=${pageBean.pageNum - 1}&depID=${maps["depID"]}&postId=${maps["postId"]}&staffName=${maps["staffName"]}">[上一页]</a>&nbsp;&nbsp;
+            <a
+                    <c:choose>
+
+                        <c:when test="${pageBean.pageNum == pageBean.totalPage}">href="#"</c:when>
+
+                        <c:otherwise>href="advancedQuery.action?pageNum=${pageBean.pageNum + 1}&depID=${maps["depID"]}&postId=${maps["postId"]}&staffName=${maps["staffName"]}"</c:otherwise>
+
+                    </c:choose>
+            >[下一页]</a>&nbsp;&nbsp;
+            <a href="advancedQuery.action?pageNum=${pageBean.totalPage}&depID=${maps["depID"]}&postId=${maps["postId"]}&staffName=${maps["staffName"]}">[尾页]</a>
+        </span>
+                </td>
+            </tr>
+        </table>
+    </c:otherwise>
+</c:choose>
+
 </body>
 <script>
     window.onload = function (){

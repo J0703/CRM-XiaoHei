@@ -63,10 +63,18 @@
     <td align="right">
     	<span>第<s:property value="#pageBean.pageNum"/>/<s:property value="#pageBean.totalPage"/>页</span>
         <span>
-        	<a href="#">[首页]</a>&nbsp;&nbsp;
-            <a href="#">[上一页]</a>&nbsp;&nbsp;
-            <a href="#">[下一页]</a>&nbsp;&nbsp;
-            <a href="#">[尾页]</a>
+        	<a href="findAllDepart.action">[首页]</a>&nbsp;&nbsp;
+            <a href="findAllDepart.action?pageNum=${pageBean.pageNum - 1}">[上一页]</a>&nbsp;&nbsp;
+            <a
+            <c:choose>
+
+                <c:when test="${pageBean.pageNum == pageBean.totalPage}">href="#"</c:when>
+
+                <c:otherwise>href="findAllDepart.action?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
+
+            </c:choose>
+            >[下一页]</a>&nbsp;&nbsp;
+            <a href="findAllDepart.action?pageNum=${pageBean.totalPage}">[尾页]</a>
         </span>
     </td>
   </tr>

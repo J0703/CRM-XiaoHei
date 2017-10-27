@@ -7,6 +7,8 @@ import com.lanou.domain.Staff;
 import com.lanou.service.DepartmentService;
 import com.lanou.service.PostService;
 import com.lanou.service.StaffService;
+import com.lanou.util.PageBean;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 import org.apache.commons.lang3.StringUtils;
@@ -15,10 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by dllo on 17/10/25.
@@ -52,13 +51,20 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
     private Set<Post> posts;
 
+    private int pageNum;
+
+    private Map<String,String> maps;
+
+    /* 每页的数据条数 */
+    private int pageSize = 3;
+
     public String login(){
 
         Staff staffInfo = staffService.login(this.staff.getLoginName(), this.staff.getLoginPwd());
 
         if(staffInfo != null){
 
-            this.staff = staffInfo;
+            ActionContext.getContext().put("staffInfo", staffInfo);
 
             return SUCCESS;
 
@@ -74,9 +80,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
     public String findAll(){
 
-        this.staffs = staffService.findAllStaff();
+        PageBean<Staff> pageBean = staffService.findAllStaff(staff, pageNum, pageSize);
 
-//        System.out.println(staffs);
+        ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
 
@@ -139,7 +145,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
         staffService.addStaff(post,staff);
 
-        this.staffs = staffService.findAllStaff();
+        PageBean<Staff> pageBean = staffService.findAllStaff(staff, pageNum, pageSize);
+
+        ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
 
@@ -165,7 +173,19 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
 //        System.out.println(staff.getStaffName());
 
-        staffs = staffService.advancedQuery(depID, postId, staff.getStaffName());
+//        staffs = staffService.advancedQuery(depID, postId, staff.getStaffName());
+
+        maps = new HashMap<>();
+
+        maps.put("depID",depID);
+
+        maps.put("postId",postId);
+
+        maps.put("staffName",staff.getStaffName());
+
+        PageBean<Staff> pageBean = staffService.findQuery(staff, pageNum, pageSize, maps);
+
+        ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
 
@@ -246,5 +266,29 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
     public void setStaff(Staff staff) {
         this.staff = staff;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Map<String, String> getMaps() {
+        return maps;
+    }
+
+    public void setMaps(Map<String, String> maps) {
+        this.maps = maps;
     }
 }

@@ -4,6 +4,8 @@ import com.lanou.domain.Department;
 import com.lanou.domain.Post;
 import com.lanou.service.DepartmentService;
 import com.lanou.service.PostService;
+import com.lanou.util.PageBean;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 import org.apache.commons.lang3.StringUtils;
@@ -37,9 +39,16 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
 
     private String depID;
 
+    private int pageNum;
+
+    /* 每页的数据条数 */
+    private int pageSize = 3;
+
     public String findAllPost(){
 
-        posts = postService.findAllPost();
+        PageBean<Post> pageBean = postService.findAll(post, pageNum, pageSize);
+
+        ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
 
@@ -82,7 +91,9 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
 
         postService.addOrEditPost(post,depart);
 
-        posts = postService.findAllPost();
+        PageBean<Post> pageBean = postService.findAll(post, pageNum, pageSize);
+
+        ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
 
@@ -127,5 +138,21 @@ public class PostAction extends ActionSupport implements ModelDriven<Post> {
 
     public void setDepID(String depID) {
         this.depID = depID;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

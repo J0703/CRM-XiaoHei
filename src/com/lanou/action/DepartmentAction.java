@@ -29,30 +29,27 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
 
     private List<Department> departmentList;
 
-    private int pageNum = 1;
+    private int pageNum;
 
+    /* 每页的数据条数 */
     private int pageSize = 3;
 
-    public String findAllDepart(){
+    public String findAllDepart() {
 
-        String hql = "select count(d) from Department d";
+        PageBean<Department> pageBean = departService.findAll(department, pageNum, pageSize);
 
-        String condition = "from Department";
-
-        PageBean<Department> pageBean = departService.findAll(department,pageNum,pageSize,hql,condition);
-
-        ActionContext.getContext().put("pageBean",pageBean);
+        ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
 
     }
 
-    public String addOrEditDepart(){
+    public String addOrEditDepart() {
 
-        System.out.println(department.getDepID());
-        System.out.println(department.getDepName());
+//        System.out.println(department.getDepID());
+//        System.out.println(department.getDepName());
 
-        if(StringUtils.isBlank(department.getDepName())){
+        if (StringUtils.isBlank(department.getDepName())) {
 
             addActionError("部门名称不能为空");
 
@@ -62,7 +59,9 @@ public class DepartmentAction extends ActionSupport implements ModelDriven<Depar
 
         departService.addOrEditDepart(department);
 
-        departmentList = departService.findAllDepart();
+        PageBean<Department> pageBean = departService.findAll(department, pageNum, pageSize);
+
+        ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
 

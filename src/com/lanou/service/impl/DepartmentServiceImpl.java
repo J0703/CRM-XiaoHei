@@ -3,6 +3,7 @@ package com.lanou.service.impl;
 import com.lanou.dao.DepartmentDao;
 import com.lanou.domain.Department;
 import com.lanou.service.DepartmentService;
+import com.lanou.util.PageBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,6 +14,20 @@ import java.util.List;
 public class DepartmentServiceImpl extends BaseServiceImpl<Department> implements DepartmentService {
 
     private DepartmentDao departmentDao;
+
+
+    /* 覆写父类findAll方法 */
+    @Override
+    public PageBean<Department> findAll(Department department, int pageNum, int pageSize) {
+
+        if(pageNum == 0) pageNum ++;
+
+        String hql = "select count(d) from Department d";
+
+        String condition = "from Department";
+
+        return super.findAll(department, pageNum, pageSize, hql, condition);
+    }
 
     @Override
     public List<Department> findAllDepart() {

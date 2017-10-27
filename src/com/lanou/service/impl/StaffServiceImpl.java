@@ -4,21 +4,24 @@ import com.lanou.dao.StaffDao;
 import com.lanou.domain.Post;
 import com.lanou.domain.Staff;
 import com.lanou.service.StaffService;
-import org.apache.commons.collections.map.HashedMap;
+import com.lanou.util.PageBean;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by dllo on 17/10/25.
  */
-public class StaffServiceImpl implements StaffService {
+public class StaffServiceImpl extends BaseServiceImpl<Staff> implements StaffService {
 
     private StaffDao staffDao;
+
+    private List<String> params;
 
     @Override
     public Staff login(String loginName, String loginPwd) {
@@ -32,11 +35,15 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public List<Staff> findAllStaff() {
+    public PageBean<Staff> findAllStaff(Staff staff, int pageNum, int pageSize) {
 
-        String hql = "from Staff";
+        if(pageNum == 0) pageNum ++;
 
-        return staffDao.findAll(hql);
+        String hql = "select count(s) from Staff s";
+
+        String condition = "from Staff";
+
+        return super.findAll(staff,pageNum,pageSize,hql,condition);
     }
 
     @Override
@@ -63,12 +70,36 @@ public class StaffServiceImpl implements StaffService {
 
     }
 
+
+
     @Override
-    public List<Staff> advancedQuery(String depID, String postId, String staffName) {
+    public PageBean<Staff> findQuery(Staff staff, int pageNum, int pageSize, Map<String,String> param) {
 
-        List<String> params = new ArrayList<>();
+        if(pageNum == 0) pageNum ++;
 
-        StringBuffer sb = new StringBuffer("from Staff s where 1=1 ");
+        String condition = "from Staff s where 1=1 ";
+
+        condition = advancedQuery(param.get("depID"),param.get("postId"),param.get("staffName"),condition);
+
+        String hql = "select count(s) "+ condition;
+
+        int totalRecord = staffDao.getTotalRecord(hql, params.toArray());
+
+        PageBean<Staff> pageBean = new PageBean<>(pageNum, pageSize, totalRecord);
+
+        List<Staff> data = staffDao.findAll(condition, params.toArray(), pageBean.getStartIndex(), pageBean.getPageSize());
+
+        pageBean.setData(data);
+
+        return pageBean;
+    }
+
+    @Override
+    public String advancedQuery(String depID, String postId, String staffName, String str) {
+
+        params = new ArrayList<>();
+
+        StringBuffer sb = new StringBuffer(str);
 
         if (!depID.equals("-1")){
 
@@ -94,15 +125,22 @@ public class StaffServiceImpl implements StaffService {
 
         }
 
-        return staffDao.find(sb.toString(), params.toArray());
+        return sb.toString();
 
     }
+
+
+
+
 
     public StaffDao getStaffDao() {
         return staffDao;
     }
 
     public void setStaffDao(StaffDao staffDao) {
+
         this.staffDao = staffDao;
+
+        super.setBaseDao(staffDao);
     }
 }

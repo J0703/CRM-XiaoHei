@@ -1,24 +1,28 @@
 package com.lanou.service;
 
-import com.lanou.domain.Department;
+
 import com.lanou.domain.Post;
 import com.lanou.domain.Staff;
+import com.lanou.util.PageBean;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
+
 
 /**
  * Created by dllo on 17/10/25.
  */
-public interface StaffService {
+public interface StaffService extends BaseService<Staff> {
 
     Staff login(String loginName, String loginPwd);
 
-    List<Staff> findAllStaff();
+    PageBean<Staff> findAllStaff(Staff staff, int pageNum, int pageSize);
 
     Staff findStaffById(Serializable id);
 
     void addStaff(Post post, Staff staff);
 
-    List<Staff> advancedQuery(String depID, String postId, String staffName);
+    PageBean<Staff> findQuery(Staff staff, int pageNum, int pageSize, Map<String,String> param);
+
+    String advancedQuery(String depID, String postId, String staffName, String str);
 }

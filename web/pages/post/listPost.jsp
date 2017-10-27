@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -46,7 +47,7 @@
     <td width="6%" align="center">职务名称</td>
     <td width="7%" align="center">编辑</td>
   </tr>
-  <c:forEach items="${posts}" var="post">
+  <c:forEach items="${pageBean.data}" var="post">
   	<tr class="tabtd1">
 	    <td align="center">${post.department.depName}</td>
 	    <td align="center">${post.postName} </td>
@@ -60,18 +61,26 @@
 
 
 
-<table border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr>
-    <td align="right">
-    	<span>第1/3页</span>
-        <span>
-        	<a href="#">[首页]</a>&nbsp;&nbsp;
-            <a href="#">[上一页]</a>&nbsp;&nbsp;
-            <a href="#">[下一页]</a>&nbsp;&nbsp;
-            <a href="#">[尾页]</a>
+ <table border="0" cellspacing="0" cellpadding="0" align="center">
+     <tr>
+         <td align="right">
+             <span>第<s:property value="#pageBean.pageNum"/>/<s:property value="#pageBean.totalPage"/>页</span>
+             <span>
+        	<a href="findAllPost.action">[首页]</a>&nbsp;&nbsp;
+            <a href="findAllPost.action?pageNum=${pageBean.pageNum - 1}">[上一页]</a>&nbsp;&nbsp;
+            <a
+                    <c:choose>
+
+                        <c:when test="${pageBean.pageNum == pageBean.totalPage}">href="#"</c:when>
+
+                        <c:otherwise>href="findAllPost.action?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
+
+                    </c:choose>
+            >[下一页]</a>&nbsp;&nbsp;
+            <a href="findAllPost.action?pageNum=${pageBean.totalPage}">[尾页]</a>
         </span>
-    </td>
-  </tr>
-</table>
+         </td>
+     </tr>
+ </table>
 </body>
 </html>

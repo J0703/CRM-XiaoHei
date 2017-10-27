@@ -4,6 +4,7 @@ import com.lanou.dao.PostDao;
 import com.lanou.domain.Department;
 import com.lanou.domain.Post;
 import com.lanou.service.PostService;
+import com.lanou.util.PageBean;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by dllo on 17/10/25.
  */
-public class PostServiceImpl implements PostService {
+public class PostServiceImpl extends BaseServiceImpl<Post> implements PostService {
 
     private PostDao postDao;
 
@@ -22,7 +23,24 @@ public class PostServiceImpl implements PostService {
     }
 
     public void setPostDao(PostDao postDao) {
+
         this.postDao = postDao;
+
+        super.setBaseDao(postDao);
+
+    }
+
+    @Override
+    public PageBean<Post> findAll(Post post, int pageNum, int pageSize) {
+
+        if(pageNum == 0) pageNum ++;
+
+        String hql = "select count(p) from Post p";
+
+        String condition = "from Post";
+
+        return super.findAll(post, pageNum, pageSize, hql, condition);
+
     }
 
     @Override

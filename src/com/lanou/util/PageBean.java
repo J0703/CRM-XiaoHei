@@ -22,10 +22,10 @@ public class PageBean<T> {
     // 数据
     private List<T> data; //分页数据
 
-    public PageBean(int pageNum, int pageSize, int totalPage) {
+    public PageBean(int pageNum, int pageSize, int tatalRecord) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
-        this.totalPage = totalPage;
+        this.tatalRecord = tatalRecord;
     }
 
     public int getPageNum() {
@@ -53,7 +53,9 @@ public class PageBean<T> {
     }
 
     public int getStartIndex() {
-        return startIndex;
+
+        return (pageNum-1)*pageSize;
+
     }
 
     public void setStartIndex(int startIndex) {
@@ -61,6 +63,16 @@ public class PageBean<T> {
     }
 
     public int getTotalPage() {
+
+        if(tatalRecord % pageSize == 0){
+
+            totalPage = tatalRecord / pageSize;
+
+        } else {
+
+            totalPage = tatalRecord / pageSize + 1;
+        }
+
         return totalPage;
     }
 
