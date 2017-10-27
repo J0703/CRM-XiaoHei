@@ -97,7 +97,7 @@
 								<tr>
 									<td width="51" valign="middle">
 										<font color="#FFFFFF">
-											欢迎您： <s:property value="#staffInfo.staffName"/>
+											欢迎您： ${staffInfo.staffName}
 										</font>
 									</td>
 								</tr>
@@ -131,7 +131,7 @@
 											<font color="ffffff">更改密码</font>
 										</a>
 									</td>
-										<td width="55" valign="middle"><a href="${pageContext.request.contextPath}/staff/staffAction_logout" target="_top"><font color="ffffff">重新登录</font></a></td>
+										<td width="55" valign="middle"><a href="${pageContext.request.contextPath}/logout.action" target="_top"><font color="ffffff">重新登录</font></a></td>
 								</tr>
 							</table>
 						</div>

@@ -68,7 +68,7 @@
             <a
             <c:choose>
 
-                <c:when test="${pageBean.pageNum == pageBean.totalPage}">href="#"</c:when>
+                <c:when test="${pageBean.pageNum >= pageBean.totalPage}">href="#"</c:when>
 
                 <c:otherwise>href="findAllDepart.action?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
 

@@ -16,9 +16,15 @@
 
             <result name="error">pages/error.jsp</result>
 
-            <result name="success">pages/frame.jsp</result>
+            <result name="success" type="redirect">pages/frame.jsp</result>
 
             <result name="input">pages/login.jsp</result>
+
+        </action>
+
+        <action name="logout" class="com.lanou.action.StaffAction" method="logout">
+
+            <result name="success" type="redirect">pages/login.jsp</result>
 
         </action>
 
@@ -87,6 +93,14 @@
         <action name="advancedQuery" class="com.lanou.action.StaffAction" method="advancedQuery">
 
             <result name="success">/pages/staff/listStaff.jsp</result>
+
+        </action>
+
+        <action name="changePassword" class="com.lanou.action.StaffAction" method="changePassword">
+
+            <result name="success">/pages/frame/right.jsp</result>
+
+            <result name="input">/pages/staff/updPwd.jsp</result>
 
         </action>
 

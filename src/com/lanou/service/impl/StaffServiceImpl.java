@@ -35,18 +35,6 @@ public class StaffServiceImpl extends BaseServiceImpl<Staff> implements StaffSer
     }
 
     @Override
-    public PageBean<Staff> findAllStaff(Staff staff, int pageNum, int pageSize) {
-
-        if(pageNum == 0) pageNum ++;
-
-        String hql = "select count(s) from Staff s";
-
-        String condition = "from Staff";
-
-        return super.findAll(staff,pageNum,pageSize,hql,condition);
-    }
-
-    @Override
     public Staff findStaffById(Serializable id) {
 
         return staffDao.findById(id, Staff.class);
@@ -70,7 +58,17 @@ public class StaffServiceImpl extends BaseServiceImpl<Staff> implements StaffSer
 
     }
 
+    @Override
+    public PageBean<Staff> findAllStaff(Staff staff, int pageNum, int pageSize) {
 
+        if(pageNum == 0) pageNum ++;
+
+        String hql = "select count(s) from Staff s";
+
+        String condition = "from Staff";
+
+        return super.findAll(staff,pageNum,pageSize,hql,condition);
+    }
 
     @Override
     public PageBean<Staff> findQuery(Staff staff, int pageNum, int pageSize, Map<String,String> param) {

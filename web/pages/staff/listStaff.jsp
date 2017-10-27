@@ -113,7 +113,7 @@
             <a
                     <c:choose>
 
-                        <c:when test="${pageBean.pageNum == pageBean.totalPage}">href="#"</c:when>
+                        <c:when test="${pageBean.pageNum >= pageBean.totalPage}">href="#"</c:when>
 
                         <c:otherwise>href="findAllStaff.action?pageNum=${pageBean.pageNum + 1}"</c:otherwise>
 
@@ -137,7 +137,7 @@
             <a
                     <c:choose>
 
-                        <c:when test="${pageBean.pageNum == pageBean.totalPage}">href="#"</c:when>
+                        <c:when test="${pageBean.pageNum >= pageBean.totalPage}">href="#"</c:when>
 
                         <c:otherwise>href="advancedQuery.action?pageNum=${pageBean.pageNum + 1}&depID=${maps["depID"]}&postId=${maps["postId"]}&staffName=${maps["staffName"]}"</c:otherwise>
 

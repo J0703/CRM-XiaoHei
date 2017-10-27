@@ -58,13 +58,19 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
     /* 每页的数据条数 */
     private int pageSize = 3;
 
+    private String oldPassword;
+
+    private String newPassword;
+
+    private String reNewPassword;
+
     public String login(){
 
         Staff staffInfo = staffService.login(this.staff.getLoginName(), this.staff.getLoginPwd());
 
         if(staffInfo != null){
 
-            ActionContext.getContext().put("staffInfo", staffInfo);
+            ActionContext.getContext().getApplication().put("staffInfo",staffInfo);
 
             return SUCCESS;
 
@@ -78,6 +84,27 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
     }
 
+    public String logout(){
+
+        ActionContext.getContext().getApplication().remove("staffInfo");
+
+        return SUCCESS;
+
+    }
+
+    /* 更改密码 */
+    public String changePassword(){
+
+        Staff staff = (Staff) ActionContext.getContext().getApplication().get("staffInfo");
+
+        staff.setLoginPwd(newPassword);
+
+        staffService.addStaff(staff.getPost(),staff);
+
+        return SUCCESS;
+
+    }
+
     public String findAll(){
 
         PageBean<Staff> pageBean = staffService.findAllStaff(staff, pageNum, pageSize);
@@ -88,21 +115,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
     }
 
-    public void validateLogin(){
-
-        if(StringUtils.isBlank(staff.getLoginName()) || StringUtils.isBlank(staff.getLoginPwd())){
-
-            addActionError("用户名或密码不能为空,请重新输入!");
-
-        }
-
-    }
-
     public String findAllDepartAjax(){
 
         this.departmentList = departService.findAllDepart();
-
-//        System.out.println(departmentList);
 
         return SUCCESS;
 
@@ -171,10 +186,6 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
     /* 高级查询 */
     public String advancedQuery(){
 
-//        System.out.println(staff.getStaffName());
-
-//        staffs = staffService.advancedQuery(depID, postId, staff.getStaffName());
-
         maps = new HashMap<>();
 
         maps.put("depID",depID);
@@ -200,6 +211,47 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
         return staff;
     }
 
+    /* 登录验证拦截方法 */
+    public void validateLogin(){
+
+        if(StringUtils.isBlank(staff.getLoginName()) || StringUtils.isBlank(staff.getLoginPwd())){
+
+            addActionError("用户名或密码不能为空,请重新输入!");
+
+        }
+
+    }
+
+    /* 更改密码拦截验证 */
+    public void validateChangePassword(){
+
+        Staff staff = (Staff) ActionContext.getContext().getApplication().get("staffInfo");
+
+        if(!staff.getLoginPwd().equals(oldPassword)){
+
+            addActionError("连旧密码都不知道?真怀疑你是怎么登陆上来的");
+
+            return;
+
+        } else if(StringUtils.isBlank(newPassword) || StringUtils.isBlank(reNewPassword)){
+
+            addActionError("难道敲回车就能登录了么 o_O???");
+
+            return;
+
+        } else if(!newPassword.equals(reNewPassword)){
+
+            addActionError("两次输入的并不一样‘(*>﹏<*)′ ~");
+
+            return;
+
+        } else if(oldPassword.equals(newPassword)){
+
+            addActionError("这样改密码还有什么用 π_π");
+
+        }
+
+    }
 
     /* 表单判空方法 */
     private List<String> passForm(){
@@ -290,5 +342,29 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
     public void setMaps(Map<String, String> maps) {
         this.maps = maps;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getReNewPassword() {
+        return reNewPassword;
+    }
+
+    public void setReNewPassword(String reNewPassword) {
+        this.reNewPassword = reNewPassword;
     }
 }
