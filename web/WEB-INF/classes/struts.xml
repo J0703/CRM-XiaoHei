@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true"/>
+
+    <constant name="struts.objectFactory" value="spring"/>
+
+    <package name="crm" extends="json-default">
+
+        <action name="login" class="com.lanou.action.StaffAction" method="login">
+
+            <result name="error">pages/error.jsp</result>
+
+            <result name="success">pages/frame.jsp</result>
+
+            <result name="input">pages/login.jsp</result>
+
+        </action>
+
+        <action name="findAllDepart" class="com.lanou.action.DepartmentAction" method="findAllDepart">
+
+            <result name="success">/pages/department/listDepartment.jsp</result>
+
+        </action>
+
+        <action name="addOrEditDepart" class="com.lanou.action.DepartmentAction" method="addOrEditDepart">
+
+            <result name="success">/pages/department/listDepartment.jsp</result>
+
+            <result name="input">/pages/department/addOrEditDepartment.jsp</result>
+
+        </action>
+
+        <action name="findAllPost" class="com.lanou.action.PostAction" method="findAllPost">
+
+            <result name="success">/pages/post/listPost.jsp</result>
+
+        </action>
+
+        <action name="intoEditPost" class="com.lanou.action.PostAction" method="intoEditPost">
+
+            <result name="success">/pages/post/addOrEditPost.jsp</result>
+
+        </action>
+
+        <action name="addOrEditPost" class="com.lanou.action.PostAction" method="addOrEditPost">
+
+            <result name="success">/pages/post/listPost.jsp</result>
+
+            <result name="input">/pages/post/addOrEditPost.jsp</result>
+
+        </action>
+
+        <action name="findAllStaff" class="com.lanou.action.StaffAction" method="findAll">
+
+            <result name="success">/pages/staff/listStaff.jsp</result>
+
+        </action>
+
+        <action name="addStaff" class="com.lanou.action.StaffAction" method="addStaff">
+
+            <result name="success">/pages/staff/listStaff.jsp</result>
+
+            <result name="input">/pages/staff/addStaff.jsp</result>
+
+        </action>
+
+        <action name="intoEditStaff" class="com.lanou.action.StaffAction" method="intoEditStaff">
+
+            <result name="success">pages/staff/editStaff.jsp</result>
+
+        </action>
+
+        <action name="editStaff" class="com.lanou.action.StaffAction" method="addStaff">
+
+            <result name="success">/pages/staff/listStaff.jsp</result>
+
+            <result name="input">pages/staff/editStaff.jsp</result>
+
+        </action>
+
+        <action name="advancedQuery" class="com.lanou.action.StaffAction" method="advancedQuery">
+
+            <result name="success">/pages/staff/listStaff.jsp</result>
+
+        </action>
+
+    </package>
+
+    <package name="ajax" extends="json-default">
+
+        <!-- 员工列表ajax部分 -->
+        <action name="findAllDepartAjax" class="com.lanou.action.StaffAction" method="findAllDepartAjax">
+
+            <result name="success" type="json">
+
+                <param name="root">departmentList</param>
+
+            </result>
+
+        </action>
+
+        <action name="findPostByDepatId" class="com.lanou.action.StaffAction" method="findPostByDepatId">
+
+            <result name="success" type="json">
+
+                <param name="root">posts</param>
+
+            </result>
+
+        </action>
+
+    </package>
+
+</struts>
