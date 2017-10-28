@@ -3,6 +3,7 @@ package com.lanou.service.impl;
 import com.lanou.dao.StaffDao;
 import com.lanou.domain.Post;
 import com.lanou.domain.Staff;
+import com.lanou.service.StaffException;
 import com.lanou.service.StaffService;
 import com.lanou.util.PageBean;
 
@@ -42,15 +43,35 @@ public class StaffServiceImpl extends BaseServiceImpl<Staff> implements StaffSer
     }
 
     @Override
-    public void addStaff(Post post, Staff staff) {
+    public void addStaff(Post post, Staff staff) throws StaffException {
 
         staff.setPost(post);
 
+        String hql = "from Staff where loginName=?";
+
+        Object[] params = {staff.getLoginName()};
+
+        List<Staff> list = staffDao.find(hql, params);
+
         if(StringUtils.isBlank(staff.getStaffId())){
+
+            /* 判断登录名是否重名,重名则抛出异常 */
+
+            if(list.size() > 0){
+
+                throw new StaffException("登录名已被用过了,换一个吧!");
+
+            }
 
             staffDao.add(staff);
 
         } else{
+
+            if(list.size() > 0 && !list.get(0).getStaffId().equals(staff.getStaffId())){
+
+                throw new StaffException("登录名已被用过了,不能改成这个名字!");
+
+            }
 
             staffDao.update(staff);
 

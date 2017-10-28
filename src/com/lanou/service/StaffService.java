@@ -20,7 +20,7 @@ public interface StaffService extends BaseService<Staff> {
 
     Staff findStaffById(Serializable id);
 
-    void addStaff(Post post, Staff staff);
+    void addStaff(Post post, Staff staff) throws StaffException;
 
     PageBean<Staff> findQuery(Staff staff, int pageNum, int pageSize, Map<String,String> param);
 

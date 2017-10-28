@@ -6,6 +6,7 @@ import com.lanou.domain.Post;
 import com.lanou.domain.Staff;
 import com.lanou.service.DepartmentService;
 import com.lanou.service.PostService;
+import com.lanou.service.StaffException;
 import com.lanou.service.StaffService;
 import com.lanou.util.PageBean;
 import com.opensymphony.xwork2.ActionContext;
@@ -99,10 +100,19 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
         staff.setLoginPwd(newPassword);
 
-        staffService.addStaff(staff.getPost(),staff);
+        try {
 
-        return SUCCESS;
+            staffService.addStaff(staff.getPost(),staff);
 
+            return SUCCESS;
+
+        } catch (StaffException e) {
+
+            addActionError(e.getMessage());
+
+            return INPUT;
+
+        }
     }
 
     public String findAll(){
@@ -153,31 +163,43 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
             }
 
+            /* 表单回显方法 */
+            findInfoFromStaffId();
+
             return INPUT;
         }
 
         Post post = postService.findPostById(postId);
 
-        staffService.addStaff(post,staff);
+        //禁止注册重复的登录名,不允许修改重复的登录名,本身登录名可以通过修改
+        try {
 
-        PageBean<Staff> pageBean = staffService.findAllStaff(staff, pageNum, pageSize);
+            staffService.addStaff(post,staff);
 
-        ActionContext.getContext().put("pageBean", pageBean);
+            PageBean<Staff> pageBean = staffService.findAllStaff(staff, pageNum, pageSize);
 
-        return SUCCESS;
+            ActionContext.getContext().put("pageBean", pageBean);
+
+            return SUCCESS;
+
+        } catch (StaffException e) {
+
+            addActionError(e.getMessage());
+
+            /* 表单回显方法 */
+            findInfoFromStaffId();
+
+            return INPUT;
+
+        }
 
     }
 
     /* 进入修改员工页面方法,进行表单回显 */
     public String intoEditStaff(){
 
-//        System.out.println("员工id:" + staff.getStaffId());
-
-        this.staff = staffService.findStaffById(staff.getStaffId());
-
-        this.departmentList = departService.findAllDepart();
-
-        posts = staff.getPost().getDepartment().getPosts();
+        /* 表单回显方法 */
+        findInfoFromStaffId();
 
         return SUCCESS;
 
@@ -199,6 +221,17 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
         ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
+
+    }
+
+    /* 表单回显封装方法 */
+    private void findInfoFromStaffId(){
+
+        this.staff = staffService.findStaffById(staff.getStaffId());
+
+        this.departmentList = departService.findAllDepart();
+
+        this.posts = staff.getPost().getDepartment().getPosts();
 
     }
 
@@ -226,6 +259,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
     public void validateChangePassword(){
 
         Staff staff = (Staff) ActionContext.getContext().getApplication().get("staffInfo");
+
+         /* 刷新状态 */
+        staff = staffService.findStaffById(staff.getStaffId());
 
         if(!staff.getLoginPwd().equals(oldPassword)){
 

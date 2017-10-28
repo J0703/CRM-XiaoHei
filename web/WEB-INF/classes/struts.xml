@@ -12,6 +12,35 @@
 
     <package name="crm" extends="json-default">
 
+        <!-- 拦截器配置 -->
+        <interceptors>
+
+            <interceptor name="loginCheck" class="com.lanou.interceptor.LoginInterceptor"/>
+
+            <interceptor-stack name="myInterceptorStack">
+
+                <interceptor-ref name="loginCheck">
+
+                    <param name="excludeMethods">login</param>
+
+                </interceptor-ref>
+
+                <interceptor-ref name="defaultStack"/>
+
+            </interceptor-stack>
+
+        </interceptors>
+
+        <!-- 全局拦截器 -->
+        <default-interceptor-ref name="myInterceptorStack"/>
+
+        <!-- 全局结果集 -->
+        <global-results>
+
+            <result name="login">pages/login.jsp</result>
+
+        </global-results>
+
         <action name="login" class="com.lanou.action.StaffAction" method="login">
 
             <result name="error">pages/error.jsp</result>
