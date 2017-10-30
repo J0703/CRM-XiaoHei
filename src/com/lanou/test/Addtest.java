@@ -9,7 +9,11 @@ import org.hibernate.cfg.Configuration;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import sun.misc.BASE64Encoder;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /**
@@ -19,16 +23,16 @@ public class Addtest{
 
     private SessionFactory sessionFactory;
 
-    @Before
-    public void init(){
-
-        Configuration configuration = new Configuration();
-
-        configuration.configure();
-
-        sessionFactory = configuration.buildSessionFactory();
-
-    }
+//    @Before
+//    public void init(){
+//
+//        Configuration configuration = new Configuration();
+//
+//        configuration.configure();
+//
+//        sessionFactory = configuration.buildSessionFactory();
+//
+//    }
 
     @Test
     public void add(){
@@ -58,6 +62,31 @@ public class Addtest{
         staff.setPost(post);
 
         session.save(staff);
+
+    }
+
+    double e;
+
+
+    @Test
+
+    public void print() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+        System.out.println(e);
+
+//        String a = "12.5";
+
+//        System.out.println(Integer.parseInt(a));
+
+        String str = "123456";
+
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+
+        BASE64Encoder base64en = new BASE64Encoder();
+
+        String s = base64en.encode(md5.digest(str.getBytes("utf-8")));
+
+        System.out.println(s);
 
     }
 

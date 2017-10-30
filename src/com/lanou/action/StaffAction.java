@@ -1,6 +1,5 @@
 package com.lanou.action;
 
-import com.lanou.dao.StaffDao;
 import com.lanou.domain.Department;
 import com.lanou.domain.Post;
 import com.lanou.domain.Staff;
@@ -17,7 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import sun.misc.BASE64Encoder;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -65,9 +68,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
     private String reNewPassword;
 
-    public String login(){
+    public String login() throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
-        Staff staffInfo = staffService.login(this.staff.getLoginName(), this.staff.getLoginPwd());
+        Staff staffInfo = staffService.login(this.staff.getLoginName(), encodeMD5(staff.getLoginPwd()));
 
         if(staffInfo != null){
 
@@ -94,11 +97,11 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
     }
 
     /* 更改密码 */
-    public String changePassword(){
+    public String changePassword() throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         Staff staff = (Staff) ActionContext.getContext().getApplication().get("staffInfo");
 
-        staff.setLoginPwd(newPassword);
+        staff.setLoginPwd(encodeMD5(newPassword));
 
         try {
 
@@ -151,7 +154,7 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
     }
 
     /* 修改与添加共用方法 */
-    public String addStaff(){
+    public String addStaff() throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         List<String> msgs = passForm();
 
@@ -170,6 +173,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
         }
 
         Post post = postService.findPostById(postId);
+
+        /* 使用MD5加密替换登录密码,存入md5码至数据库中 */
+        staff.setLoginPwd(encodeMD5(staff.getLoginPwd()));
 
         //禁止注册重复的登录名,不允许修改重复的登录名,本身登录名可以通过修改
         try {
@@ -256,14 +262,14 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
     }
 
     /* 更改密码拦截验证 */
-    public void validateChangePassword(){
+    public void validateChangePassword() throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         Staff staff = (Staff) ActionContext.getContext().getApplication().get("staffInfo");
 
          /* 刷新状态 */
         staff = staffService.findStaffById(staff.getStaffId());
 
-        if(!staff.getLoginPwd().equals(oldPassword)){
+        if(!staff.getLoginPwd().equals(encodeMD5(oldPassword))){
 
             addActionError("连旧密码都不知道?真怀疑你是怎么登陆上来的");
 
@@ -286,6 +292,17 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
             addActionError("这样改密码还有什么用 π_π");
 
         }
+
+    }
+
+    /* md5加密方法 */
+    private String encodeMD5(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+
+        BASE64Encoder base64en = new BASE64Encoder();
+
+        return base64en.encode(md5.digest(str.getBytes("utf-8")));
 
     }
 

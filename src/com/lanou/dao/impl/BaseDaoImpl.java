@@ -40,15 +40,6 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
         return null;
     }
 
-    public List<T> find(String hql, List<String> params) {
-
-
-        List<T> tList = (List<T>) getHibernateTemplate().find(hql, params);
-
-        return tList;
-
-    }
-
     @Override
     public T findById(Serializable id, Class<T> tClass) {
 

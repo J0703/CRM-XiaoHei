@@ -133,6 +133,18 @@
 
         </action>
 
+        <action name="findAllCourseType" class="com.teach.action.CourseTypeAction" method="findAllCourseType">
+
+            <result name="success">/pages/coursetype/listCourse.jsp</result>
+
+        </action>
+
+        <action name="advancedQCT" class="com.teach.action.CourseTypeAction" method="advancedQueryCourseType">
+
+            <result name="success">/pages/coursetype/listCourse.jsp</result>
+
+        </action>
+
     </package>
 
     <package name="ajax" extends="json-default">

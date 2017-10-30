@@ -92,6 +92,22 @@
         <property name="postDao" ref="postDao"/>
     </bean>
 
+    <!-- research设置 -->
+    <bean id="researchDao" class="com.teach.dao.impl.ResearchDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="researchService" class="com.teach.service.impl.ResearchServiceImpl">
+        <property name="researchDao" ref="researchDao"/>
+    </bean>
+
+    <!-- courseType设置 -->
+    <bean id="courseTypeDao" class="com.teach.dao.impl.CourseTypeDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="courseTypeService" class="com.teach.service.impl.CourseTypeServiceImpl">
+        <property name="courseTypeDao" ref="courseTypeDao"/>
+    </bean>
+
     <!-- Base设置 -->
 
     <!--<bean id="baseDao" class="com.lanou.dao.impl.BaseDaoImpl">-->
