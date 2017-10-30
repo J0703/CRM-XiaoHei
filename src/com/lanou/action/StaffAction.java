@@ -235,6 +235,9 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
 
         this.staff = staffService.findStaffById(staff.getStaffId());
 
+        /* 回填不显示密码 */
+        staff.setLoginPwd("");
+
         this.departmentList = departService.findAllDepart();
 
         this.posts = staff.getPost().getDepartment().getPosts();
