@@ -48,15 +48,33 @@ public class CourseTypeAction extends ActionSupport implements ModelDriven<Cours
 
         PageBean<CourseType> pageBean = courseTypeService.findAllCourseType(courseType, pageNum, pageSize);
 
-        System.out.println(pageBean.getData().toString());
-
         ActionContext.getContext().put("pageBean", pageBean);
 
         return SUCCESS;
 
     }
 
+    /* 进入方法 */
+    public String intoEditCourseType(){
 
+        courseType = courseTypeService.findCourseTypeById(courseType.getCourseTypeID());
+
+        return SUCCESS;
+
+    }
+
+    /* 添加与修改共用方法 */
+    public String addOrEditCourseType(){
+
+        courseTypeService.saveCourseType(courseType);
+
+        PageBean<CourseType> pageBean = courseTypeService.findAllCourseType(courseType, pageNum, pageSize);
+
+        ActionContext.getContext().put("pageBean", pageBean);
+
+        return SUCCESS;
+
+    }
 
     /* 高级查询-指定课程 */
     public String advancedQueryCourseType(){
@@ -89,6 +107,9 @@ public class CourseTypeAction extends ActionSupport implements ModelDriven<Cours
         params.put("lessonCostEnd",lessonCostEnd);
 
     }
+
+    /* 表单判断方法 */
+
 
     @Override
     public CourseType getModel() {

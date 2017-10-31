@@ -6,6 +6,7 @@ import com.teach.dao.CourseTypeDao;
 import com.teach.domain.CourseType;
 import com.teach.service.CourseTypeService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,28 @@ public class CourseTypeServiceImpl extends BaseServiceImpl<CourseType> implement
 
         return pageBean;
     }
+
+    @Override
+    public CourseType findCourseTypeById(Serializable id) {
+
+        return courseTypeDao.findById(id, CourseType.class);
+    }
+
+    @Override
+    public void saveCourseType(CourseType courseType) {
+
+        if(courseType.getCourseTypeID().equals("")){
+
+            courseTypeDao.add(courseType);
+
+        } else {
+
+            courseTypeDao.update(courseType);
+
+        }
+
+    }
+
 
     /* 拼接字符串,并封装参数的方法 */
     private String advancedQuery(Map<String, Object> params, String str) {

@@ -59,7 +59,7 @@
     <aop:config>
 
         <!-- 配置切点 -->
-        <aop:pointcut id="pointcut" expression="execution(* com.lanou.service.impl.*.*(..))"/>
+        <aop:pointcut id="pointcut" expression="execution(* com.*.service.impl.*.*(..))"/>
 
         <!-- 配置通知 -->
         <aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"/>

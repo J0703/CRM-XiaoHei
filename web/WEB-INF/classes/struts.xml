@@ -155,6 +155,18 @@
 
         </action>
 
+        <action name="intoECT" class="com.teach.action.CourseTypeAction" method="intoEditCourseType">
+
+            <result name="success">/pages/coursetype/addOrEditCourse.jsp</result>
+
+        </action>
+
+        <action name="addOECT" class="com.teach.action.CourseTypeAction" method="addOrEditCourseType">
+
+            <result name="success">/pages/coursetype/listCourse.jsp</result>
+
+        </action>
+
     </package>
 
     <package name="ajax" extends="json-default">

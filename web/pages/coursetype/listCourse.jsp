@@ -101,7 +101,7 @@
         <td align="center">${course.courseCost}</td>
         <td width="11%" align="center">
 
-            <a href="${pageContext.request.contextPath}/pages/coursetype/addOrEditCourse.jsp"><img
+            <a href="${pageContext.request.contextPath}/intoECT.action?courseTypeID=${course.courseTypeID}"><img
                     src="${pageContext.request.contextPath}/images/button/modify.gif" class="img"/></a>
         </td>
     </tr>

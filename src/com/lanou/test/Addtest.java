@@ -88,6 +88,10 @@ public class Addtest{
 
         System.out.println(s);
 
+        System.out.println(40-32/2);
+
+//        System.out.println(10);
+
     }
 
 }
