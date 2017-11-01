@@ -165,9 +165,8 @@ public class StaffAction extends ActionSupport implements ModelDriven<Staff>{
                 addActionError(msg);
 
             }
-
             /* 表单回显方法 */
-            findInfoFromStaffId();
+            if(staff.getStaffId() != null) findInfoFromStaffId();
 
             return INPUT;
         }
