@@ -9,7 +9,7 @@
     <title>无标题文档</title>
 
     <link href="${pageContext.request.contextPath}/css/sys.css" type="text/css" rel="stylesheet"/>
-    <script src="../../jquery-3.2.1.js"></script>
+    <script src="../../js/jquery-3.2.1.js"></script>
 </head>
 
 <body>
